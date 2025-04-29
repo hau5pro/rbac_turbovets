@@ -2,7 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Organization } from './organization.entity';
 import { User } from './user.entity';
-import { UserRole } from '../infrastructure/enums/user-role.enum';
+import { UserRole } from '../../infrastructure/enums/user-role.enum';
 
 @Entity()
 export class UserOrgRole {
