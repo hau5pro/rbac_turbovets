@@ -1,11 +1,21 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { AppDataSource } from './db/app-data-source';
 import { AppModule } from './app.module';
+import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 async function bootstrap() {
+  await AppDataSource.initialize();
+
   const app = await NestFactory.create(AppModule);
 
+  configureSwagger(app);
+
+  await app.listen(process.env.PORT ?? 3000);
+}
+
+function configureSwagger(app: INestApplication<any>) {
   const config = new DocumentBuilder()
     .setTitle('RBAC API')
     .setDescription('Role-based Access Control API')
@@ -13,7 +23,6 @@ async function bootstrap() {
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-
-  await app.listen(process.env.PORT ?? 3000);
 }
+
 bootstrap();
