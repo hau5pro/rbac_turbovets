@@ -15,7 +15,7 @@ export class Organization {
   name: string;
 
   @ManyToOne(() => Organization, (org) => org.children, { nullable: true })
-  parent: Organization;
+  parent: Organization | null;
 
   @OneToMany(() => Organization, (org) => org.parent)
   children: Organization[];
