@@ -3,6 +3,6 @@ import { UserRole } from '../enums';
 
 export const ROLES = 'roles';
 
-export const RequiredRoles = (roles: UserRole[]) => {
+export const Roles = (...roles: UserRole[]) => {
   return SetMetadata(ROLES, roles);
 };

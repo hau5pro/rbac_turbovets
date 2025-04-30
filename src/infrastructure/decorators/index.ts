@@ -1,1 +1,2 @@
-export * from './required-roles.decorator';
+export * from './roles.decorator';
+export * from './permissions.decorator';
