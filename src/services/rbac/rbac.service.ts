@@ -16,14 +16,16 @@ export class RbacService {
   async hasPermissionForOrg(
     userId: number,
     orgId: number,
-    permission: Permission,
+    permissions: Permission[],
   ): Promise<boolean> {
     const userRole = await this.getUserRoleForOrg(userId, orgId);
     if (!userRole) {
       return false;
     }
 
-    return this.hasPermission(userRole, permission);
+    return permissions.every((permission) => {
+      return this.hasPermission(userRole, permission);
+    });
   }
 
   private async getUserRoleForOrg(
