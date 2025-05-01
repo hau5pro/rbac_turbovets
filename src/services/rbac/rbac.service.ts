@@ -5,6 +5,7 @@ import { RolePermissionsMap } from 'src/infrastructure/permissions/permissions.c
 import { UserOrgRole } from 'src/db/entities/user-role.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Organization } from 'src/db/entities/organization.entity';
 
 @Injectable()
 export class RbacService {
@@ -15,34 +16,42 @@ export class RbacService {
 
   async hasPermissionForOrg(
     userId: number,
-    orgId: number,
+    targetOrgId: number,
     permissions: Permission[],
   ): Promise<boolean> {
-    const userRole = await this.getUserRoleForOrg(userId, orgId);
-    if (!userRole) {
-      return false;
+    const userOrgRoles = await this.userOrgRoleRepo.find({
+      where: { user: { id: userId } },
+      relations: ['organization', 'organization.children'],
+    });
+
+    for (const role of userOrgRoles) {
+      if (this.includesOrg(role.organization, targetOrgId)) {
+        if (this.hasPermissionsForRole(role, permissions)) {
+          return true;
+        }
+      }
     }
 
-    return permissions.every((permission) => {
-      return this.hasPermission(userRole, permission);
-    });
+    return false;
   }
 
-  private async getUserRoleForOrg(
-    userId: number,
-    orgId: number,
-  ): Promise<UserRole | null> {
-    const userOrgRole = await this.userOrgRoleRepo.findOne({
-      where: {
-        user: {
-          id: userId,
-        },
-        organization: { id: orgId },
-      },
-      relations: ['user', 'organization'],
-    });
+  private includesOrg(org: Organization, targetOrgId: number): boolean {
+    if (org.id === targetOrgId) return true;
+    for (const child of org.children ?? []) {
+      if (this.includesOrg(child, targetOrgId)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-    return userOrgRole ? userOrgRole.role : null;
+  private hasPermissionsForRole(
+    userOrgRole: UserOrgRole,
+    permissions: Permission[],
+  ): boolean {
+    return permissions.every((permission) =>
+      this.hasPermission(userOrgRole.role, permission),
+    );
   }
 
   private hasPermission(role: UserRole, permission: Permission): boolean {
