@@ -1,21 +1,11 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 import { ApiProperty } from '@nestjs/swagger';
+import { BaseEntity } from './base.entity';
 import { Organization } from './organization.entity';
 
 @Entity()
 export class PatientRecord extends BaseEntity {
-  @ApiProperty()
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @ApiProperty()
   @Column()
   name: string;

@@ -1,21 +1,12 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
+import { BaseEntity } from './base.entity';
 import { Organization } from './organization.entity';
 import { User } from './user.entity';
 import { UserRole } from 'src/infrastructure/enums';
 
 @Entity()
 export class UserOrgRole extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @Column()
   userId: number;
 
