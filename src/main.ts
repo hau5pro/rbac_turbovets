@@ -1,13 +1,10 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { AppDataSource } from './db/app-data-source';
 import { AppModule } from './app.module';
 import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 async function bootstrap() {
-  await AppDataSource.initialize();
-
   const app = await NestFactory.create(AppModule);
 
   configureSwagger(app);

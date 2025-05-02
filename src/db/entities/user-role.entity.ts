@@ -21,9 +21,6 @@ export class UserOrgRole extends BaseEntity {
   @JoinColumn({ name: 'orgId ' })
   organization: Organization;
 
-  @Column({
-    type: 'enum',
-    enum: UserRole,
-  })
+  @Column()
   role: UserRole;
 }
