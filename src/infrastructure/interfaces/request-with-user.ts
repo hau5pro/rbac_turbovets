@@ -1,8 +1,8 @@
+import { AuthData } from './auth-data';
 import { Request } from 'express';
-import { User } from 'src/db/entities/user.entity';
 
 export interface RequestWithUser extends Request {
-  user: User;
+  user: AuthData;
   body: {
     orgId: number;
     [key: string]: any;
