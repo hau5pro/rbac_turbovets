@@ -4,7 +4,11 @@ import { Permissions, Roles } from 'src/infrastructure/decorators';
 
 import { PatientRecordRoutes } from './routes';
 import { PatientRecordService } from './patient-record.service';
-import { CreateRecordRequest, UpdateRecordRequest } from './requests';
+import {
+  CreateRecordRequest,
+  GetRecordsRequest,
+  UpdateRecordRequest,
+} from './requests';
 import { RequestWithUser } from 'src/infrastructure/interfaces/request-with-user';
 import { WithIdRequest } from 'src/infrastructure/requests';
 
@@ -32,8 +36,8 @@ export class PatientRecordController {
   @Post(PatientRecordRoutes.get)
   @Roles(UserRole.OWNER, UserRole.ADMIN, UserRole.VIEWER)
   @Permissions(Permission.READ)
-  async getRecord(@Body() request: WithIdRequest) {
-    return this.patientService.getRecord(request);
+  async getRecords(@Body() request: GetRecordsRequest) {
+    return this.patientService.getRecords(request);
   }
 
   @Post(PatientRecordRoutes.delete)

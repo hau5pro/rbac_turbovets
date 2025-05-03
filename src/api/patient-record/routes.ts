@@ -9,6 +9,6 @@ export class PatientRecordRoutes extends Routes {
   static delete = 'delete';
 
   static getFullRoute(route: string): string {
-    return `${PatientRecordRoutes.rootRoute}/${route}`;
+    return `/${PatientRecordRoutes.rootRoute}/${route}`;
   }
 }

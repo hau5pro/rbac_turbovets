@@ -18,7 +18,7 @@ export class UserOrgRole extends BaseEntity {
   orgId: number;
 
   @ManyToOne(() => Organization)
-  @JoinColumn({ name: 'orgId ' })
+  @JoinColumn({ name: 'orgId' })
   organization: Organization;
 
   @Column()

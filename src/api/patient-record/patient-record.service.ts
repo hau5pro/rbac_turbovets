@@ -1,4 +1,8 @@
-import { CreateRecordRequest, UpdateRecordRequest } from './requests';
+import {
+  CreateRecordRequest,
+  GetRecordsRequest,
+  UpdateRecordRequest,
+} from './requests';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PatientRecord } from 'src/db/entities/patient-record.entity';
@@ -33,16 +37,13 @@ export class PatientRecordService {
     return this.patientRecordRepo.save(newRecord);
   }
 
-  async getRecord(request: WithIdRequest): Promise<PatientRecord> {
-    const record = await this.patientRecordRepo.findOne({
-      where: { id: request.id },
+  async getRecords(request: GetRecordsRequest): Promise<PatientRecord[]> {
+    const records = await this.patientRecordRepo.find({
+      where: { orgId: request.orgId },
+      take: request.limit ?? 10,
     });
 
-    if (!record) {
-      throw new Error(PatientRecordService.errorMessages.recordNotFound);
-    }
-
-    return record;
+    return records;
   }
 
   async updateRecord(request: UpdateRecordRequest) {
